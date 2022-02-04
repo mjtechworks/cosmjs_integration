@@ -1,6 +1,6 @@
 const { calculateFee, GasPrice } = require("@cosmjs/stargate");
 const { DirectSecp256k1HdWallet } = require("@cosmjs/proto-signing");
-const { SigningCosmWasmClient } = require("@cosmjs/cosmwasm-stargate");
+const { SigningCosmWasmClient, CosmWasmClient } = require("@cosmjs/cosmwasm-stargate");
 const _ = require("fs");
 
 const rpcEndpoint = "https://rpc.cliffnet.cosmwasm.com:443";
@@ -81,6 +81,11 @@ async function main() {
         executeFee,
     );
     console.info("escrow approve result: ", approve_result);
+
+	// query
+	const client = await CosmWasmClient.connect(rpcEndpoint);
+	const query_result = await client.queryContractSmart(contractAddress, {details:{id: "foo1"}});
+	console.info("query result", query_result);
 }
 
 main();
